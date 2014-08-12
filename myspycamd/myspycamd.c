@@ -35,5 +35,7 @@ int main( int argc, char *argv[] )
 void help( void )
 {
 	printf( "myspycamd - myspycam daemon\n"
-		"usage: myspycamd\n" );
+		"usage: myspycamd [-h] [-D]\n"
+		"options: -h  show help\n"
+		"         -D  do not daemonize\n" );
 }
