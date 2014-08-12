@@ -6,6 +6,7 @@
 #include <unistd.h>
 
 /* Program specific headers. */
+#include "config.h"
 
 
 /** Entry point.
