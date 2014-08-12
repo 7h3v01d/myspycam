@@ -4,6 +4,7 @@
 
 /* OS specific headers. */
 #include <unistd.h>
+#include <signal.h>
 
 /* Program specific headers. */
 #include "config.h"
@@ -11,7 +12,8 @@
 
 
 /* Private function prototypes. */
-void help( void );
+static void help( void );
+static void terminate( int sig );
 
 
 /** Entry point.
@@ -40,15 +42,45 @@ int main( int argc, char *argv[] )
 		}
 	}
 
+	signal( SIGCHLD, SIG_IGN );
+	signal( SIGTERM, terminate );
+
+	/* XXX: free all resources here */
+
 	return EXIT_SUCCESS;
 }
 
 
 /** Show program help. */
-void help( void )
+static void help( void )
 {
 	printf( "myspycamd - myspycam daemon\n"
+		"built on " __DATE__ " at " __TIME__ "\n"
+		"\n"
 		"usage: myspycamd [-h] [-D]\n"
-		"options: -h  show help\n"
-		"         -D  do not daemonize\n" );
+		"\n"
+		"  -h   show help\n"
+		"  -D   do not daemonize\n" );
+}
+
+/** Terminate program.
+ *
+ * @param sig Signal number.
+ */
+static void terminate( int sig )
+{
+	(void)sig;
+
+
+	static int force = 0;
+
+
+	if( 0 != force ) {
+		/* XXX: forced to terminate */
+		exit( EXIT_SUCCESS );
+	}
+
+	force = !0;
+
+	/* XXX: free all resources here */
 }
