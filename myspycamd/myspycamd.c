@@ -20,10 +20,13 @@ void help( void );
  *
  * @return Exit code.
  */
-int main( int argc, char **argv )
+int main( int argc, char *argv[] )
 {
-	(void)argc;
-	(void)argv;
+	if( 0 != config_parse_args(argc, argv) ) {
+		help();
+		return EXIT_FAILURE;
+	}
+
 	return EXIT_SUCCESS;
 }
 

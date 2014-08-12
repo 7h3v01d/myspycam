@@ -2,7 +2,7 @@
 #define __CONFIG_H__
 
 
-int conf_parse_args( char **args );
+int config_parse_args( int argc, char *args[] );
 
 
 #endif /* __CONFIG_H__ */
