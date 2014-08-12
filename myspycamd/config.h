@@ -2,7 +2,14 @@
 #define __CONFIG_H__
 
 
+/* Configuration options. */
+#define CONFIG_DAEMONIZE 1
+
+
+/* Function prototypes. */
 int config_parse_args( int argc, char *args[] );
+int config_get_int( int option );
+const char *config_get_str( int option );
 
 
 #endif /* __CONFIG_H__ */

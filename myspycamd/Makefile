@@ -2,7 +2,7 @@ CC=gcc
 CFLAGS=-c -Wall -Wextra -std=gnu99 -ggdb
 LDFLAGS=
 LIBS=
-SOURCES=config.c myspycamd.c
+SOURCES=utils.c config.c myspycamd.c
 OBJECTS=$(SOURCES:.c=.o)
 EXECUTABLE=myspycamd
 
@@ -16,6 +16,10 @@ $(EXECUTABLE): $(OBJECTS)
 
 clean:
 	rm -f $(OBJECTS) $(EXECUTABLE)
+
+release: all
+	strip $(EXECUTABLE)
+	file $(EXECUTABLE)
 
 run:
 	./$(EXECUTABLE) $(EXECUTABLE).conf

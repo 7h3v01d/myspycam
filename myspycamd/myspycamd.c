@@ -7,6 +7,7 @@
 
 /* Program specific headers. */
 #include "config.h"
+#include "utils.h"
 
 
 /* Private function prototypes. */
@@ -25,6 +26,17 @@ int main( int argc, char *argv[] )
 	if( 0 != config_parse_args(argc, argv) ) {
 		help();
 		return EXIT_FAILURE;
+	}
+
+	if( 0 != config_get_int(CONFIG_DAEMONIZE) ) {
+		int ret = daemonize( 0, 0 );
+		if( 0 < ret ) {
+			return EXIT_SUCCESS;
+		}
+		else
+		if( 0 > ret ) {
+			printf( "could not daemonize: %m\n" );
+		}
 	}
 
 	return EXIT_SUCCESS;
