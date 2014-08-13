@@ -4,6 +4,7 @@
 
 /* OS specific headers. */
 #include <unistd.h>
+#include <syslog.h>
 
 /* Program specific headers. */
 #include "config.h"
@@ -12,6 +13,7 @@
 /* Private variables. */
 static int daemonize = !0;
 static int port = 46004;
+static int debug = LOG_DEBUG;
 
 
 /** Parse command line parameters.
@@ -25,10 +27,19 @@ static int port = 46004;
 int config_parse_args( int argc, char *argv[] )
 {
 	int c;
-	while( -1 != (c = getopt(argc, argv, "hDp:")) ) {
+	while( -1 != (c = getopt(argc, argv, "hDd:p:")) ) {
 		switch( c ) {
 		case 'D':
 			daemonize = 0;
+			break;
+
+		case 'd':
+			debug = atoi( optarg );
+			if( LOG_EMERG > debug ||
+			    LOG_DEBUG < debug ) {
+				printf( "invalid argument value: '-d'\n" );
+				return !0;
+			}
 			break;
 
 		case 'p':
@@ -63,6 +74,9 @@ int config_get_int( int option )
 	switch( option ) {
 	case CONFIG_DAEMONIZE:
 		return daemonize;
+
+	case CONFIG_DEBUG:
+		return debug;
 
 	case CONFIG_PORT:
 		return port;

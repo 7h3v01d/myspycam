@@ -44,6 +44,9 @@ int main( int argc, char *argv[] )
 		}
 	}
 
+	openlog( "myspycamd", LOG_NDELAY | LOG_PID, LOG_DAEMON );
+	setlogmask( LOG_UPTO(config_get_int(CONFIG_DEBUG)) );
+
 	signal( SIGCHLD, SIG_IGN );
 	signal( SIGTERM, terminate );
 
@@ -74,11 +77,12 @@ static void help( void )
 	printf( "myspycamd - myspycam daemon\n"
 		"built on " __DATE__ " at " __TIME__ "\n"
 		"\n"
-		"usage: myspycamd [-h] [-D] [-p port]\n"
+		"usage: myspycamd [-h] [-D] [-p port] [-d priority]\n"
 		"\n"
 		"  -h   show help\n"
 		"  -D   do not daemonize\n"
-		"  -p   port number\n" );
+		"  -p   port number\n"
+		"  -d   debug priority" );
 }
 
 /** Terminate program.
@@ -93,8 +97,11 @@ static void terminate( int sig )
 	static int force = 0;
 
 
+	syslog( LOG_INFO, "INFO: SIGTERM received" );
+
 	if( 0 != force ) {
 		/* XXX: forced to terminate */
+		syslog( LOG_WARNING, "WARNING: forced to terminate" );
 		exit( EXIT_SUCCESS );
 	}
 
