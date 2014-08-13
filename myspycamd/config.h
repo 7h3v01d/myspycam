@@ -4,6 +4,7 @@
 
 /* Configuration options. */
 #define CONFIG_DAEMONIZE 1
+#define CONFIG_PORT      2
 
 
 /* Function prototypes. */

@@ -1,4 +1,5 @@
 /* C standard library headers. */
+#include <stdlib.h>
 #include <stdio.h>
 
 /* OS specific headers. */
@@ -10,6 +11,7 @@
 
 /* Private variables. */
 static int daemonize = !0;
+static int port = 46004;
 
 
 /** Parse command line parameters.
@@ -23,10 +25,19 @@ static int daemonize = !0;
 int config_parse_args( int argc, char *argv[] )
 {
 	int c;
-	while( -1 != (c = getopt(argc, argv, "hD")) ) {
+	while( -1 != (c = getopt(argc, argv, "hDp:")) ) {
 		switch( c ) {
 		case 'D':
 			daemonize = 0;
+			break;
+
+		case 'p':
+			port = atoi( optarg );
+			if( 1 > port ||
+			    65536 < port ) {
+				printf( "invalid argument value: '-p'\n" );
+				return !0;
+			}
 			break;
 
 		case 'h':
@@ -52,6 +63,9 @@ int config_get_int( int option )
 	switch( option ) {
 	case CONFIG_DAEMONIZE:
 		return daemonize;
+
+	case CONFIG_PORT:
+		return port;
 	}
 
 	return 0;

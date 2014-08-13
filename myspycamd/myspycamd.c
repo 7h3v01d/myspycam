@@ -5,10 +5,12 @@
 /* OS specific headers. */
 #include <unistd.h>
 #include <signal.h>
+#include <syslog.h>
 
 /* Program specific headers. */
 #include "config.h"
 #include "utils.h"
+#include "server.h"
 
 
 /* Private function prototypes. */
@@ -38,14 +40,29 @@ int main( int argc, char *argv[] )
 		}
 		else
 		if( 0 > ret ) {
-			printf( "could not daemonize: %m\n" );
+			printf( "WARNING: could not daemonize: %m\n" );
 		}
 	}
 
 	signal( SIGCHLD, SIG_IGN );
 	signal( SIGTERM, terminate );
 
+	if( 0 != server_init() ) {
+		syslog( LOG_ERR, "ERROR: could not initialize server" );
+		server_shutdown();
+		closelog();
+		return EXIT_FAILURE;
+	}
+
+	if( 0 != server_listen() ) {
+		syslog( LOG_ERR, "ERROR: could not listen on socket" );
+		server_shutdown();
+		closelog();
+		return EXIT_FAILURE;
+	}
+
 	/* XXX: free all resources here */
+	server_shutdown();
 
 	return EXIT_SUCCESS;
 }
@@ -57,10 +74,11 @@ static void help( void )
 	printf( "myspycamd - myspycam daemon\n"
 		"built on " __DATE__ " at " __TIME__ "\n"
 		"\n"
-		"usage: myspycamd [-h] [-D]\n"
+		"usage: myspycamd [-h] [-D] [-p port]\n"
 		"\n"
 		"  -h   show help\n"
-		"  -D   do not daemonize\n" );
+		"  -D   do not daemonize\n"
+		"  -p   port number\n" );
 }
 
 /** Terminate program.
@@ -83,4 +101,5 @@ static void terminate( int sig )
 	force = !0;
 
 	/* XXX: free all resources here */
+	server_shutdown();
 }
