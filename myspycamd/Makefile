@@ -34,7 +34,7 @@ show:
 	@ps aux | grep $(EXECUTABLE) | grep -v grep
 
 commit:
-	git commit -a --allow-empty-message
+	git commit -a --allow-empty-message --no-edit
 
 tail:
 	@tail -n1 -f /var/log/syslog
