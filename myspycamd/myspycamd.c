@@ -79,7 +79,7 @@ static void help( void )
 		"  -h   show help\n"
 		"  -D   do not daemonize\n"
 		"  -p   port number\n"
-		"  -d   debug priority" );
+		"  -d   debug priority\n" );
 }
 
 /** Terminate program.
