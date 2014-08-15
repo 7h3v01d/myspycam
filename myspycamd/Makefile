@@ -37,9 +37,10 @@ commit:
 	git commit -a --allow-empty-message
 
 tail:
-	@tail -n2 -f /var/log/syslog
+	@tail -n1 -f /var/log/syslog
 
 distclean: clean
+	rm -f $(EXECUTABLE).valgrind
 
 valgrind:
 	cat /dev/null > $(EXECUTABLE).valgrind
