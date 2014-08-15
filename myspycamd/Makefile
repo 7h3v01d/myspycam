@@ -2,7 +2,7 @@ CC=gcc
 CFLAGS=-c -Wall -Wextra -std=gnu99 -ggdb
 LDFLAGS=
 LIBS=
-SOURCES=server.c log.c utils.c config.c myspycamd.c
+SOURCES=config.c utils.c log.c server.c myspycamd.c
 OBJECTS=$(SOURCES:.c=.o)
 EXECUTABLE=myspycamd
 
