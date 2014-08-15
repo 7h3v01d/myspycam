@@ -1,3 +1,6 @@
+/* C standard library headers. */
+#include <stdlib.h>
+
 /* OS specific headers. */
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -106,9 +109,10 @@ int server_listen( void )
 			//client_handle();
 			//client_shutdown();
 			log_debug( "connection [%d] from %s closed", fd, utils_get_ip(saddr) );
-			//config_free();
-			//exit( EX_OK );
+			//client_terminate();
+			exit( EXIT_SUCCESS );
 		}
 	}
+
 	return 0;
 }
