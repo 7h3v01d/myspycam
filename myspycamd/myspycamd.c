@@ -5,11 +5,11 @@
 /* OS specific headers. */
 #include <unistd.h>
 #include <signal.h>
-#include <syslog.h>
 
 /* Program specific headers. */
 #include "config.h"
 #include "utils.h"
+#include "log.h"
 #include "server.h"
 
 
@@ -44,28 +44,25 @@ int main( int argc, char *argv[] )
 		}
 	}
 
-	openlog( "myspycamd", LOG_NDELAY | LOG_PID, LOG_DAEMON );
-	setlogmask( LOG_UPTO(config_get_int(CONFIG_DEBUG)) );
+	log_open();
 
 	signal( SIGCHLD, SIG_IGN );
 	signal( SIGTERM, terminate );
 
 	if( 0 != server_init() ) {
-		syslog( LOG_ERR, "ERROR: could not initialize server" );
-		server_shutdown();
-		closelog();
+		log_error( "could not initialize server" );
+		terminate( 0 );
 		return EXIT_FAILURE;
 	}
 
 	if( 0 != server_listen() ) {
-		syslog( LOG_ERR, "ERROR: could not listen on socket" );
-		server_shutdown();
-		closelog();
+		log_error( "could not listen on socket" );
+		terminate( 0 );
 		return EXIT_FAILURE;
 	}
 
 	/* XXX: free all resources here */
-	server_shutdown();
+	terminate( 0 );
 
 	return EXIT_SUCCESS;
 }
@@ -91,17 +88,16 @@ static void help( void )
  */
 static void terminate( int sig )
 {
-	(void)sig;
-
-
 	static int force = 0;
 
 
-	syslog( LOG_INFO, "INFO: SIGTERM received" );
+	if( 0 != sig ) {
+		log_info( "SIGTERM received" );
+	}
 
 	if( 0 != force ) {
 		/* XXX: forced to terminate */
-		syslog( LOG_WARNING, "WARNING: forced to terminate" );
+		log_warning( "forced to terminate" );
 		exit( EXIT_SUCCESS );
 	}
 
@@ -109,4 +105,5 @@ static void terminate( int sig )
 
 	/* XXX: free all resources here */
 	server_shutdown();
+	log_close();
 }
