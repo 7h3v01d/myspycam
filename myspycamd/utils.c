@@ -11,7 +11,7 @@
 
 /** Detach from the terminal and run in the background.
  *
- * @param nochdir If 0, change CWD to "/".
+ * @param nochdir If 0, change PWD to "/".
  * @param noclose If 0, redirect stdin/out/err to "/dev/null".
  *
  * @return 0 if daemonized (child should continue).
