@@ -33,7 +33,7 @@ int main( int argc, char *argv[] )
 	}
 
 	if( 0 != config_get_int(CONFIG_DAEMONIZE) ) {
-		int ret = daemonize( 0, 0 );
+		int ret = utils_daemonize( 0, 0 );
 		if( 0 < ret ) {
 			/* XXX: free all resources here */
 			return EXIT_SUCCESS;

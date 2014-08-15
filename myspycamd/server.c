@@ -3,10 +3,12 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <unistd.h>
+#include <errno.h>
 
 /* Program specific headers. */
 #include "log.h"
 #include "config.h"
+#include "utils.h"
 
 
 /* Private variables. */
@@ -73,5 +75,40 @@ int server_init( void )
  */
 int server_listen( void )
 {
+	while( 0 != run ) {
+		log_debug( "awaiting new connection" );
+
+		struct sockaddr_in saddr;
+		size_t salen = sizeof(saddr);
+		int fd = accept( sd, (struct sockaddr *)&saddr, (socklen_t *)&salen );
+		if( -1 == fd &&
+		    EINTR != errno &&
+		    (EBADF != errno &&
+		     0 != run) ) {
+			log_error( "could not accept connection: %m" );
+		}
+
+		if( -1 == fd ) {
+			continue;
+		}
+
+		log_debug( "new connection [%d] from %s", fd, utils_get_ip(saddr) );
+
+		pid_t child = fork();
+		if( -1 == child ) {
+			log_error( "could not fork child: %m" );
+			log_debug( "connection [%d] from %s not accepted", fd, utils_get_ip(saddr) );
+		}
+		else
+		if( 0 == child ) {
+			log_debug( "connection [%d] from %s accepted", fd, utils_get_ip(saddr) );
+			//client_init( fd );
+			//client_handle();
+			//client_shutdown();
+			log_debug( "connection [%d] from %s closed", fd, utils_get_ip(saddr) );
+			//config_free();
+			//exit( EX_OK );
+		}
+	}
 	return 0;
 }

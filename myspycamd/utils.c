@@ -4,6 +4,9 @@
 #include <unistd.h>
 #include <signal.h>
 #include <fcntl.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 
 
 /** Detach from the terminal and run in the background.
@@ -15,7 +18,7 @@
  * @return Positive if daemonized (parent should exit).
  * @return Negative if error occured.
  */
-int daemonize( int nochdir, int noclose )
+int utils_daemonize( int nochdir, int noclose )
 {
 	pid_t parent = getpid(); /* XXX: must be called before fork() */
 
@@ -61,4 +64,15 @@ int daemonize( int nochdir, int noclose )
 	}
 
 	return 0;
+}
+
+/** Return IP address string.
+ *
+ * @param saddr Address structure.
+ *
+ * @return IP string.
+ */
+const char *utils_get_ip( struct sockaddr_in saddr )
+{
+	return inet_ntoa( saddr.sin_addr );
 }
