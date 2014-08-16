@@ -5,6 +5,7 @@
 /* Function prototypes. */
 void client_init( int fd );
 void client_shutdown( void );
+void client_terminate( int sig );
 void client_handle( void );
 
 

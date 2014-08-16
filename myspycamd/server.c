@@ -12,6 +12,7 @@
 #include "log.h"
 #include "config.h"
 #include "utils.h"
+#include "client.h"
 
 
 /* Private variables. */
@@ -105,11 +106,11 @@ int server_listen( void )
 		else
 		if( 0 == child ) {
 			log_debug( "connection [%d] from %s accepted", fd, utils_get_ip(saddr) );
-			//client_init( fd );
-			//client_handle();
-			//client_shutdown();
+			client_init( fd );
+			client_handle();
+			client_shutdown();
 			log_debug( "connection [%d] from %s closed", fd, utils_get_ip(saddr) );
-			//client_terminate();
+			client_terminate( 0 );
 			exit( EXIT_SUCCESS );
 		}
 	}
