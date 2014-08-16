@@ -19,6 +19,7 @@ clean:
 
 release: all
 	strip $(EXECUTABLE)
+	ls -lAh $(EXECUTABLE)
 	file $(EXECUTABLE)
 
 run:
