@@ -138,8 +138,15 @@ void client_handle( void )
 			data_size += size;
 
 			if( 0 == required_size ) {
-				if( 0 == protocol_verify_header(data_buff, data_size) ) {
+				int ret = protocol_verify_header( data_buff, data_size );
+				if( 0 == ret ) {
 					required_size = *(int *)data_buff;
+					log_debug( "request header verified" );
+				}
+				else
+				if( 0 < ret ) {
+					log_error( "invalid request header" );
+					client_shutdown();
 				}
 			}
 
