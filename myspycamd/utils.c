@@ -13,6 +13,7 @@
 #include <arpa/inet.h>
 
 /* Program specific headers. */
+#include "config.h"
 #include "log.h"
 
 
@@ -91,6 +92,10 @@ const char *utils_get_ip( struct sockaddr_in saddr )
  */
 void utils_dump_bytes( char *data, int size )
 {
+	if( config_get_int(CONFIG_DEBUG) < LOG_DEBUG ) {
+		return;
+	}
+
 	if( NULL == data ) {
 		log_debug( "size: %d data: NULL", size );
 		return;
