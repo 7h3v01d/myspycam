@@ -6,14 +6,24 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <signal.h>
+#include <errno.h>
 
 /* Program specific headers. */
 #include "log.h"
+#include "utils.h"
+#include "protocol.h"
+
+
+/* Private function prototypes. */
+static void client_request( char *data, int size );
 
 
 /* Private variables. */
 static int run = 0;
 static int sd = -1;
+static char *data_buff = NULL;
+static int data_len = 0;
+static int data_size = 0;
 
 
 /** Shut down client. */
@@ -24,6 +34,13 @@ void client_shutdown( void )
 		shutdown( sd, SHUT_RDWR );
 		close( sd );
 		sd = -1;
+	}
+
+	if( data_buff != NULL ) {
+		free( data_buff );
+		data_buff = NULL;
+		data_len = 0;
+		data_size = 0;
 	}
 }
 
@@ -78,4 +95,80 @@ void client_init( int fd )
 
 void client_handle( void )
 {
+	log_debug( "awaiting data from client" );
+
+	int required_size = 0;
+
+	while( 0 != run ) {
+		if( data_size+PROTOCOL_BUFF_SIZE_MIN >= data_len ) {
+			if( PROTOCOL_BUFF_SIZE_MAX < data_len+PROTOCOL_BUFF_SIZE_MIN ) {
+				log_error( "client sent too much data" );
+				break;
+			}
+
+			char *data_tmp = realloc( data_buff, data_len+PROTOCOL_BUFF_SIZE_MIN );
+			if( NULL == data_tmp ) {
+				log_critical( "not enough memory for client data" );
+				break;
+			}
+			data_buff = data_tmp;
+			data_len += PROTOCOL_BUFF_SIZE_MIN;
+		}
+
+		ssize_t size = read( sd, data_buff+data_size, PROTOCOL_BUFF_SIZE_MIN );
+		if( 0 == size ) {
+			log_info( "client closed connection" );
+			break;
+		}
+		else
+		if( -1 == size ) {
+			if( EAGAIN == errno ||
+			    EWOULDBLOCK == errno ) {
+				if( 0 == data_size ||
+				    data_size < required_size) {
+					usleep( 1000 );
+					continue;
+				}
+			}
+			else {
+				break;
+			}
+		}
+		else {
+			data_size += size;
+
+			if( 0 == required_size ) {
+				if( 0 == protocol_verify_header(data_buff, data_size) ) {
+					required_size = *(int *)data_buff;
+				}
+			}
+
+			continue;
+		}
+
+		log_debug( "%d bytes read from client", data_size );
+
+		utils_dump_bytes( data_buff, data_size );
+
+		client_request( data_buff, data_size );
+
+		if( NULL != data_buff &&
+		    PROTOCOL_BUFF_SIZE_MIN < data_len ) {
+			free( data_buff );
+			data_buff = NULL;
+			data_len = 0;
+		}
+		data_size = 0;
+		required_size = 0;
+
+		log_debug( "awaiting data from client" );
+	}
+
+	client_shutdown();
+}
+
+static void client_request( char *data, int size )
+{
+	(void)data;
+	(void)size;
 }
