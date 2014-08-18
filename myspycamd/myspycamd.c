@@ -93,15 +93,15 @@ static void terminate( int sig )
 
 	if( 0 != sig ) {
 		log_info( "SIGTERM received" );
-	}
 
-	if( 0 != force ) {
-		/* XXX: forced to terminate */
-		log_warning( "forced to terminate" );
-		exit( EXIT_SUCCESS );
-	}
+		if( 0 != force ) {
+			/* XXX: forced to terminate */
+			log_warning( "forced to terminate" );
+			exit( EXIT_SUCCESS );
+		}
 
-	force = !0;
+		force = !0;
+	}
 
 	/* XXX: free all resources here */
 	server_shutdown();

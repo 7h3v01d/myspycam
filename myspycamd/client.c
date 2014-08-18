@@ -55,15 +55,15 @@ void client_terminate( int sig )
 
 	if( 0 != sig ) {
 		log_info( "SIGTERM received" );
-	}
 
-	if( 0 != force ) {
-		/* XXX: forced to terminate */
-		log_warning( "forced to terminate" );
-		exit( EXIT_SUCCESS );
-	}
+		if( 0 != force ) {
+			/* XXX: forced to terminate */
+			log_warning( "forced to terminate" );
+			exit( EXIT_SUCCESS );
+		}
 
-	force = !0;
+		force = !0;
+	}
 
 	/* XXX: free all resources here */
 	client_shutdown();
@@ -176,6 +176,12 @@ void client_handle( void )
 
 static void client_request( char *data, int size )
 {
-	(void)data;
 	(void)size;
+
+
+	protocol_header *h = (protocol_header *)data;
+	switch( h->request ) {
+	case PROTOCOL_REQUEST_IMAGE:
+		break;
+	}
 }
