@@ -8,7 +8,15 @@
 
 #define PROTOCOL_REQUEST_IMAGE 0
 
+#define PROTOCOL_IMAGE_WIDTH_MIN   1
+#define PROTOCOL_IMAGE_WIDTH_MAX   854
+#define PROTOCOL_IMAGE_HEIGHT_MIN  1
+#define PROTOCOL_IMAGE_HEIGHT_MAX  854
+#define PROTOCOL_IMAGE_QUALITY_MIN 1
+#define PROTOCOL_IMAGE_QUALITY_MAX 100
 
+
+/* Structure definitions. */
 typedef struct __attribute__ ((packed)) protocol_header_t {
 	int size;
 	int request;
