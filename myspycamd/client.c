@@ -176,12 +176,16 @@ void client_handle( void )
 
 static void client_request( char *data, int size )
 {
-	(void)size;
+	if( 0 != protocol_verify_request(data, size) ) {
+		log_error( "invalid request data" );
+		client_shutdown();
+		return;
+	}
 
-
-	protocol_header *h = (protocol_header *)data;
+	protocol_header_t *h = (protocol_header_t *)data;
 	switch( h->request ) {
 	case PROTOCOL_REQUEST_IMAGE:
+		protocol_request_image( (protocol_request_image_t *)data );
 		break;
 	}
 }
