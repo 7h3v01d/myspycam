@@ -12,6 +12,7 @@
 #include "log.h"
 #include "utils.h"
 #include "protocol.h"
+#include "cam.h"
 
 
 /* Private function prototypes. */
@@ -42,6 +43,8 @@ void client_shutdown( void )
 		data_len = 0;
 		data_size = 0;
 	}
+
+	cam_close();
 }
 
 /** Terminate client program.
@@ -91,6 +94,11 @@ void client_init( int fd )
 	}
 
 	signal( SIGTERM, client_terminate );
+
+	if( 0 != cam_open() ) {
+		log_error( "could not open camera" );
+		client_shutdown();
+	}
 }
 
 void client_handle( void )
