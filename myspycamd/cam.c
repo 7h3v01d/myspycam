@@ -12,6 +12,11 @@
 static int fd = -1;
 
 
+/** Open camera.
+ *
+ * @return 0 if success.
+ * @return Non-zero if error occurred.
+ */
 int cam_open( void )
 {
 	fd = open( config_get_str(CONFIG_DEVICE), O_RDWR );
@@ -23,6 +28,7 @@ int cam_open( void )
 	return 0;
 }
 
+/** Close camera. */
 void cam_close( void )
 {
 	if( -1 != fd ) {
