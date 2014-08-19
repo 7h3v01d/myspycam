@@ -14,6 +14,7 @@
 static int daemonize = !0;
 static int port = 46004;
 static int debug = LOG_DEBUG;
+static char *device = "/dev/video0";
 
 
 /** Parse command line parameters.
@@ -27,7 +28,7 @@ static int debug = LOG_DEBUG;
 int config_parse_args( int argc, char *argv[] )
 {
 	int c;
-	while( -1 != (c = getopt(argc, argv, "hDd:p:")) ) {
+	while( -1 != (c = getopt(argc, argv, "hDd:p:v:")) ) {
 		switch( c ) {
 		case 'D':
 			daemonize = 0;
@@ -49,6 +50,10 @@ int config_parse_args( int argc, char *argv[] )
 				printf( "invalid argument value: '-p'\n" );
 				return !0;
 			}
+			break;
+
+		case 'v':
+			device = optarg;
 			break;
 
 		case 'h':
@@ -93,6 +98,10 @@ int config_get_int( int option )
  */
 const char *config_get_str( int option )
 {
-	(void)option;
+	switch( option ) {
+	case CONFIG_DEVICE:
+		return device;
+	}
+
 	return (void *)0;
 }

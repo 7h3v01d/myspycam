@@ -74,12 +74,13 @@ static void help( void )
 	printf( "myspycamd - myspycam daemon\n"
 		"built on " __DATE__ " at " __TIME__ "\n"
 		"\n"
-		"usage: myspycamd [-h] [-D] [-p port] [-d priority]\n"
+		"usage: myspycamd [-h] [-D] [-p port] [-d priority] [-v device]\n"
 		"\n"
 		"  -h   show help\n"
 		"  -D   do not daemonize\n"
 		"  -p   port number\n"
-		"  -d   debug priority\n" );
+		"  -d   debug priority\n"
+		"  -v   device path" );
 }
 
 /** Terminate program.

@@ -6,6 +6,7 @@
 #define CONFIG_DAEMONIZE 1
 #define CONFIG_DEBUG     2
 #define CONFIG_PORT      3
+#define CONFIG_DEVICE    4
 
 
 /* Function prototypes. */
