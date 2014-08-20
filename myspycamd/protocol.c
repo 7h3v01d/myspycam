@@ -54,11 +54,7 @@ int protocol_verify_request( char *data, int size )
 		}
 
 		protocol_request_image_t *req = (protocol_request_image_t *)data;
-		if( PROTOCOL_IMAGE_WIDTH_MIN > req->width ||
-		    PROTOCOL_IMAGE_WIDTH_MAX < req->width ||
-		    PROTOCOL_IMAGE_HEIGHT_MIN > req->height ||
-		    PROTOCOL_IMAGE_HEIGHT_MAX < req->height ||
-		    PROTOCOL_IMAGE_QUALITY_MIN > req->quality ||
+		if( PROTOCOL_IMAGE_QUALITY_MIN > req->quality ||
 		    PROTOCOL_IMAGE_QUALITY_MAX < req->quality ) {
 			log_debug( "invalid request data" );
 			return !0;
