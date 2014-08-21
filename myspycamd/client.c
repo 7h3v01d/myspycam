@@ -131,8 +131,7 @@ void client_handle( void )
 		}
 		else
 		if( -1 == size ) {
-			if( EAGAIN == errno ||
-			    EWOULDBLOCK == errno ) {
+			if( EAGAIN == errno ) {
 				if( 0 == data_size ||
 				    data_size < request_size) {
 					usleep( 1000 );
