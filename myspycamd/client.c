@@ -123,7 +123,8 @@ void client_handle( void )
 			data_len += PROTOCOL_BUFF_SIZE_MIN;
 		}
 
-		ssize_t size = read( sd, data_buff+data_size, PROTOCOL_BUFF_SIZE_MIN );
+		int max = ( 0 == request_size ) ? (int)PROTOCOL_REQ_SIZE_MIN : (request_size-data_size)%PROTOCOL_BUFF_SIZE_MIN;
+		ssize_t size = read( sd, data_buff+data_size, max );
 		if( 0 == size ) {
 			log_info( "client closed connection" );
 			break;

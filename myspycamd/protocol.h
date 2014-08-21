@@ -2,16 +2,6 @@
 #define __PROTOCOL_H__
 
 
-/* Macro definitions. */
-#define PROTOCOL_BUFF_SIZE_MIN 64
-#define PROTOCOL_BUFF_SIZE_MAX 512
-
-#define PROTOCOL_REQUEST_IMAGE 0
-
-#define PROTOCOL_IMAGE_QUALITY_MIN 1
-#define PROTOCOL_IMAGE_QUALITY_MAX 100
-
-
 /* Structure definitions. */
 typedef struct __attribute__ ((packed)) protocol_header_t {
 	int size;
@@ -22,6 +12,17 @@ typedef struct __attribute__ ((packed)) protocol_request_image_t {
 	protocol_header_t header;
 	int quality;
 } protocol_request_image_t;
+
+
+/* Macro definitions. */
+#define PROTOCOL_BUFF_SIZE_MIN 64
+#define PROTOCOL_BUFF_SIZE_MAX 512
+#define PROTOCOL_REQ_SIZE_MIN ( sizeof(protocol_header_t) )
+
+#define PROTOCOL_REQUEST_IMAGE 0
+
+#define PROTOCOL_IMAGE_QUALITY_MIN 1
+#define PROTOCOL_IMAGE_QUALITY_MAX 100
 
 
 /* Function prototypes. */
