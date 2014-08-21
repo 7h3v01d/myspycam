@@ -46,7 +46,7 @@ int cam_open( void )
 		},
 	};
 
-	if( 0 != ioctl(fd, VIDIOC_S_FMT, &fmt) ) {
+	if( -1 == ioctl(fd, VIDIOC_S_FMT, &fmt) ) {
 		log_error( "could not init camera: %m" );
 		cam_close();
 		return !0;
