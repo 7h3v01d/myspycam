@@ -15,6 +15,7 @@
 
 /* Private variables. */
 static int fd = -1;
+static char *data = NULL;
 
 
 /** Close camera. */
@@ -23,6 +24,11 @@ void cam_close( void )
 	if( -1 != fd ) {
 		close( fd );
 		fd = -1;
+	}
+
+	if( NULL != data ) {
+		free( data );
+		data = NULL;
 	}
 }
 
@@ -72,6 +78,5 @@ int cam_open( void )
  */
 const char *cam_image( void )
 {
-	
 	return NULL;
 }
