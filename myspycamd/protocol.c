@@ -53,12 +53,7 @@ int protocol_verify_request( char *data, int size )
 			return !0;
 		}
 
-		protocol_request_image_t *req = (protocol_request_image_t *)data;
-		if( PROTOCOL_IMAGE_QUALITY_MIN > req->quality ||
-		    PROTOCOL_IMAGE_QUALITY_MAX < req->quality ) {
-			log_debug( "invalid request data" );
-			return !0;
-		}
+		//protocol_request_image_t *req = (protocol_request_image_t *)data;
 	}
 
 	return 0;
