@@ -50,7 +50,7 @@ int cam_open( void )
 		.fmt.pix = {
 			.width = 640,
 			.height = 480,
-			.pixelformat = V4L2_PIX_FMT_JPEG,
+			.pixelformat = V4L2_PIX_FMT_YUYV,
 			.field = V4L2_FIELD_NONE,
 		},
 	};
@@ -60,9 +60,15 @@ int cam_open( void )
 		cam_close();
 		return !0;
 	}
+
+	log_debug( "width: %d, height: %d, pixelformat: %d",
+		   fmt.fmt.pix.width,
+		   fmt.fmt.pix.height,
+		   fmt.fmt.pix.pixelformat );
+
 	if( 640 != fmt.fmt.pix.width ||
 	    480 != fmt.fmt.pix.height ||
-	    V4L2_PIX_FMT_JPEG != fmt.fmt.pix.pixelformat ) {
+	    V4L2_PIX_FMT_YUYV != fmt.fmt.pix.pixelformat ) {
 		log_error( "could not initialize camera" );
 		cam_close();
 		return !0;
