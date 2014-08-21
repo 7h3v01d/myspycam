@@ -5,6 +5,7 @@
 /* Function prototypes. */
 int cam_open( void );
 void cam_close( void );
+const char *cam_image( void );
 
 
 #endif /* __CAM_H__ */

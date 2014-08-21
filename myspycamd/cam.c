@@ -1,3 +1,6 @@
+/* C standard library headers. */
+#include <stdlib.h>
+
 /* OS specific headers. */
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -60,4 +63,15 @@ int cam_open( void )
 	}
 
 	return 0;
+}
+
+/** Get image from camera.
+ *
+ * @return Buffer with image data.
+ * @return NULL if error occurred.
+ */
+const char *cam_image( void )
+{
+	
+	return NULL;
 }

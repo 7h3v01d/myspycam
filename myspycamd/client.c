@@ -105,7 +105,7 @@ void client_handle( void )
 {
 	log_debug( "awaiting data from client" );
 
-	int required_size = 0;
+	int request_size = 0;
 
 	while( 0 != run ) {
 		if( data_size+PROTOCOL_BUFF_SIZE_MIN >= data_len ) {
@@ -133,7 +133,7 @@ void client_handle( void )
 			if( EAGAIN == errno ||
 			    EWOULDBLOCK == errno ) {
 				if( 0 == data_size ||
-				    data_size < required_size) {
+				    data_size < request_size) {
 					usleep( 1000 );
 					continue;
 				}
@@ -145,10 +145,10 @@ void client_handle( void )
 		else {
 			data_size += size;
 
-			if( 0 == required_size ) {
+			if( 0 == request_size ) {
 				int ret = protocol_verify_header( data_buff, data_size );
 				if( 0 == ret ) {
-					required_size = *(int *)data_buff;
+					request_size = *(int *)data_buff;
 					log_debug( "request header verified" );
 				}
 				else
@@ -174,7 +174,7 @@ void client_handle( void )
 			data_len = 0;
 		}
 		data_size = 0;
-		required_size = 0;
+		request_size = 0;
 
 		log_debug( "awaiting data from client" );
 	}
