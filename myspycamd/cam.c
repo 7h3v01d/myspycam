@@ -47,7 +47,14 @@ int cam_open( void )
 	};
 
 	if( -1 == ioctl(fd, VIDIOC_S_FMT, &fmt) ) {
-		log_error( "could not init camera: %m" );
+		log_error( "could not initialize camera: %m" );
+		cam_close();
+		return !0;
+	}
+	if( 640 != fmt.fmt.pix.width ||
+	    480 != fmt.fmt.pix.height ||
+	    V4L2_PIX_FMT_JPEG != fmt.fmt.pix.pixelformat ) {
+		log_error( "could not initialize camera" );
 		cam_close();
 		return !0;
 	}
