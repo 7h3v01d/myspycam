@@ -13,6 +13,11 @@
 #include "log.h"
 
 
+/* Macro definitions. */
+#define CAM_IMAGE_WIDTH  640
+#define CAM_IMAGE_HEIGHT 480
+
+
 /* Private variables. */
 static int fd = -1;
 static char *data = NULL;
@@ -48,8 +53,8 @@ int cam_open( void )
 	struct v4l2_format fmt = {
 		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE,
 		.fmt.pix = {
-			.width = 640,
-			.height = 480,
+			.width = CAM_IMAGE_WIDTH,
+			.height = CAM_IMAGE_HEIGHT,
 			.pixelformat = V4L2_PIX_FMT_YUYV,
 			.field = V4L2_FIELD_NONE,
 		},
@@ -66,10 +71,17 @@ int cam_open( void )
 		   fmt.fmt.pix.height,
 		   fmt.fmt.pix.pixelformat );
 
-	if( 640 != fmt.fmt.pix.width ||
-	    480 != fmt.fmt.pix.height ||
+	if( CAM_IMAGE_WIDTH != fmt.fmt.pix.width ||
+	    CAM_IMAGE_HEIGHT != fmt.fmt.pix.height ||
 	    V4L2_PIX_FMT_YUYV != fmt.fmt.pix.pixelformat ) {
 		log_error( "could not initialize camera" );
+		cam_close();
+		return !0;
+	}
+
+	data = malloc( CAM_IMAGE_WIDTH*CAM_IMAGE_HEIGHT*3 );
+	if( NULL == data ) {
+		log_error( "not enough memory for framebuffer" );
 		cam_close();
 		return !0;
 	}
